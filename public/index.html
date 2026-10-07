@@ -1,0 +1,219 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Node.js</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e2f, #3b1f5e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            height: 650px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: #6a1b9a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            font-size: 24px;
+        }
+
+        .chat-header p {
+            margin-top: 5px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        #messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f4f4f4;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background: #6a1b9a;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 2px;
+        }
+
+        .bot-message {
+            background: #e0e0e0;
+            color: #222;
+            margin-right: auto;
+            border-bottom-left-radius: 2px;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #ddd;
+            gap: 10px;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        #messageInput:focus {
+            border-color: #6a1b9a;
+        }
+
+        #sendButton {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #6a1b9a;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #sendButton:hover {
+            background: #4a116d;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+            <h1>💬 Chat Node.js</h1>
+            <p>Aplicación de chat con Express</p>
+        </div>
+
+        <div id="messages">
+            <div class="message bot-message">
+                Hola 👋 Bienvenido al chat. Escribe un mensaje para comenzar.
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <input 
+                type="text" 
+                id="messageInput" 
+                placeholder="Escribe un mensaje..."
+                autocomplete="off"
+            >
+
+            <button id="sendButton">Enviar</button>
+        </div>
+
+    </div>
+
+<script>
+    const messageInput = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const messages = document.getElementById("messages");
+
+    function addMessage(text, type) {
+        const message = document.createElement("div");
+
+        message.classList.add("message");
+
+        if (type === "user") {
+            message.classList.add("user-message");
+        } else {
+            message.classList.add("bot-message");
+        }
+
+        message.textContent = text;
+
+        messages.appendChild(message);
+
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const text = messageInput.value.trim();
+
+        if (text === "") {
+            return;
+        }
+
+        // Mostrar mensaje del usuario
+        addMessage(text, "user");
+
+        // Limpiar el campo
+        messageInput.value = "";
+
+        try {
+            // Enviar mensaje al servidor Express
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    mensaje: text
+                })
+            });
+
+            // Obtener respuesta del servidor
+            const data = await response.json();
+
+            // Mostrar respuesta
+            addMessage(data.respuesta, "bot");
+
+        } catch (error) {
+            console.error("Error:", error);
+            addMessage("No se pudo conectar con el servidor.", "bot");
+        }
+    }
+
+    sendButton.addEventListener("click", sendMessage);
+
+    messageInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
+```

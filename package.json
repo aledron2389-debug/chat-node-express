@@ -1,0 +1,17 @@
+{
+  "name": "chatnodealex",
+  "version": "1.0.0",
+  "description": "Chat en tiempo real con Node.js y Socket.IO",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "Alejandro Sanchez Melchor",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
