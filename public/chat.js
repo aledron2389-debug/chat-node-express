@@ -31,7 +31,6 @@ function sonido() {
   } catch (e) {}
 }
 
-
 // Evita que alguien inyecte HTML en el chat
 function escapar(texto) {
   var div = document.createElement('div');
@@ -63,7 +62,6 @@ mensaje.addEventListener('keyup', function (e) {
 // ---------- Enviar archivo ----------
 botonArchivo.addEventListener('click', function () {
   var file = inputArchivo.files[0];
-
   if (!file) { alert('Selecciona un archivo primero'); return; }
   if (file.size > 20 * 1024 * 1024) { alert('El archivo supera 20 MB'); return; }
 
@@ -96,7 +94,6 @@ socket.on('archivo', function (data) {
 
   if (data.tipo.startsWith('image/')) {
     contenido = '<br><img src="' + url + '" style="max-width:100%;border-radius:4px;">';
-
   } else if (data.tipo.startsWith('video/')) {
     contenido = '<br><video src="' + url + '" controls style="max-width:100%;"></video>';
   } else if (data.tipo.startsWith('audio/')) {
